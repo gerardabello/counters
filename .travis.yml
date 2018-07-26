@@ -1,0 +1,41 @@
+dist: trusty
+sudo: required
+
+language: node_js
+
+node_js:
+  - "8"
+
+services:
+  - docker
+
+before_install:
+  - export DEBIAN_FRONTEND=noninteractive;
+  - sudo apt-get -qq --yes update
+  - cd frontend
+  - npm install
+  - cd ..
+  - cd backend
+  - npm install
+  - cd ..
+
+test:
+  - echo "no tests"
+
+script:
+  - cd frontend
+  - npm run build
+  - cd ..
+  - cd backend
+  - npm run build
+  - cd ..
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD";
+      docker build -t counters-frontend ./frontend;
+      docker build -t counters-backend ./backend;
+      docker tag counters-frontend gerardabello/counters-frontend;
+      docker tag counters-backend gerardabello/counters-backend;
+      docker push gerardabello/counters-frontend;
+      docker push gerardabello/counters-backend;
+    fi
+
