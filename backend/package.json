@@ -4,7 +4,7 @@
   "main": "src/server.js",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "prod": "npm run migrate && npm run serve",
+    "prod": "npm run serve",
     "serve": "NODE_ENV=production node lib/server.js",
     "dev": "npm run cleandb && concurrently -k \"npm run startdb\" \"npm run compile:watch\" \"sleep 10 && npm run start\"",
     "compile:watch": "webpack --mode development --watch",
