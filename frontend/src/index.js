@@ -7,7 +7,8 @@ import { injectGlobal } from 'styled-components'
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import { ApolloProvider } from 'react-apollo'
 
-import asyncComponent from 'components/async-component'
+import Landing from './landing'
+import Group from './group/page'
 
 import createApolloClient from './state/server/create-apollo-client'
 
@@ -17,14 +18,6 @@ import {
   fontFamily,
   colors
 } from '../components/variables'
-
-const Landing = asyncComponent(() =>
-  import(/* webpackChunkName: "landing" */ './landing')
-)
-
-const Group = asyncComponent(() =>
-  import(/* webpackChunkName: "router" */ './group/page')
-)
 
 const history = createBrowserHistory()
 
