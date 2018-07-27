@@ -52,7 +52,7 @@ const main = async _ => {
   )
 
   console.log('Starting server...')
-  app.listen(5050)
+  app.listen(3000)
 }
 
 main()
