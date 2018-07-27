@@ -111,7 +111,7 @@ class GroupPage extends Component {
 }
 
 export default compose(
-  graphql(queries.groupInfo),
+  graphql(queries.groupInfo, { options: { pollInterval: 2000 } }),
   graphql(mutations.incCounter, {
     props: ({ mutate, ownProps }) => ({
       incCounter: id =>
