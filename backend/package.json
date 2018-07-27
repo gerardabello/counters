@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "src/server.js",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "webpack --mode none",
     "prod": "npm run serve",
     "serve": "NODE_ENV=production node dist/bundle.js",
     "dev": "npm run cleandb && concurrently -k \"npm run startdb\" \"npm run compile:watch\" \"sleep 10 && npm run start\"",
@@ -28,18 +28,18 @@
     "ramda": "^0.25.0",
     "source-map-support": "^0.5.6",
     "sqlstring": "^2.3.1",
-    "squel": "^5.12.1"
+    "squel": "^5.12.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.42",
     "@babel/core": "^7.0.0-beta.42",
-    "babel-core": "7.0.0-bridge.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.42",
     "@babel/preset-env": "^7.0.0-beta.42",
-    "@babel/cli": "^7.0.0-beta.42",
+    "babel-core": "7.0.0-bridge.0",
     "babel-loader": "8.0.0-beta.0",
     "concurrently": "^3.5.1",
     "nodemon": "^1.10.0",
-    "webpack": "4.0.1",
+    "webpack": "^4.16.2",
     "webpack-cli": "^2.0.6"
   },
   "standard": {

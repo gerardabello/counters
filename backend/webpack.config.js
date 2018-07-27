@@ -10,7 +10,6 @@ module.exports = {
   resolve: {
     modules: [path.resolve('./src'), path.resolve('./node_modules')],
     alias: {
-      common: path.resolve('../common'),
       src: path.resolve('./src'),
       'pg-native': path.join(__dirname, 'aliases/pg-native.js')
     }
