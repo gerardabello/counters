@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 export const incCounter = gql`
   mutation incCounter($id: String!) {
     incCounter(id: $id) {
+      id
       count
     }
   }

@@ -16,6 +16,8 @@ import Spacer from 'components/spacer'
 import Input from 'components/input'
 import Text from 'components/text'
 
+import { CounterItem } from './counter-item'
+
 var sortByNameCaseInsensitive = R.sortBy(R.compose(R.toLower, R.prop('name')))
 var sortByIndex = R.sortBy(R.prop('index'))
 
@@ -28,137 +30,12 @@ const Root = styled.div`
   max-width: 475px;
 `
 
-const Name = styled.div`
-  flex: 1;
-`
-
 const CountersWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   margin-top: 80px;
 `
-
-const CounterItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 32px;
-  width: 100%;
-`
-
-const CountButtonWrapper = styled.div`
-  display: flex;
-  margin-left: 24px;
-  cursor: pointer;
-  user-select: none;
-`
-
-const CounterName = styled.div`
-  text-align: right;
-`
-
-const Count = styled.div`
-  color: ${colors.background};
-  background: ${colors.body};
-  height: 70px;
-  display: flex;
-  width: 96px;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-width: 550px) {
-    height: 55px;
-  }
-`
-
-class CounterNameInput extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      editing: this.props.focusOnNewCounter,
-      tempValue: props.value
-    }
-
-    this.handleNameClick = this.handleNameClick.bind(this)
-    this.handleInputBlur = this.handleInputBlur.bind(this)
-  }
-
-  componentDidMount () {
-    if (this.state.editing) {
-      this.input && this.input.focus()
-      this.input && this.input.select()
-    }
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (this.state.editing && !prevState.editing) {
-      this.input && this.input.focus()
-      this.input && this.input.select()
-    }
-  }
-
-  handleNameClick () {
-    this.setState({ editing: true, tempValue: this.props.value })
-  }
-
-  handleInputBlur () {
-    this.setState({ editing: false })
-    this.props.onChange(this.state.tempValue)
-  }
-
-  render () {
-    const { value, onChange } = this.props
-
-    if (this.state.editing) {
-      return (
-        <Input
-          fullWidth
-          fontSize='size1'
-          getRef={r => (this.input = r)}
-          onBlur={this.handleInputBlur}
-          noBorder
-          value={this.state.tempValue}
-          textAlign='right'
-          onChange={e => this.setState({ tempValue: e.target.value })}
-        />
-      )
-    }
-
-    return (
-      <CounterName onClick={this.handleNameClick}>
-        <Text size='size1'>{this.state.tempValue}</Text>
-      </CounterName>
-    )
-  }
-}
-
-const CounterItem = ({
-  name,
-  count,
-  focusOnNewCounter,
-  showName,
-  onInc,
-  onNameChange
-}) => (
-  <CounterItemWrapper>
-    {showName && (
-      <Name>
-        <CounterNameInput
-          value={name}
-          onChange={onNameChange}
-          focusOnNewCounter={focusOnNewCounter}
-        />
-      </Name>
-    )}
-    <CountButtonWrapper onClick={onInc}>
-      <Count>
-        <Text size='size1'>{count}</Text>
-      </Count>
-      <Button size='icon'>+</Button>
-    </CountButtonWrapper>
-  </CounterItemWrapper>
-)
 
 class GroupPage extends Component {
   constructor (props) {
@@ -167,6 +44,7 @@ class GroupPage extends Component {
     this.state = { focusOnNewCounter: true }
 
     this.handleAddSubcounterClick = this.handleAddSubcounterClick.bind(this)
+    this.handleIncCounter = this.handleIncCounter.bind(this)
   }
 
   shouldComponentUpdate (nextProps) {
@@ -180,6 +58,10 @@ class GroupPage extends Component {
 
   handleNameChange (name, id) {
     this.props.renameCounter(name, id)
+  }
+
+  handleIncCounter (counterId) {
+    this.props.incCounter(counterId)
   }
 
   componentDidUpdate () {
@@ -202,9 +84,10 @@ class GroupPage extends Component {
             {sortByIndex(group.counters).map((counter, i) => (
               <CounterItem
                 key={counter.id}
+                id={counter.id}
                 name={counter.name}
                 count={counter.count}
-                onInc={() => this.props.incCounter(counter.id)}
+                onInc={this.handleIncCounter}
                 onNameChange={name =>
                   this.props.renameCounter(name, counter.id)
                 }
@@ -230,19 +113,20 @@ class GroupPage extends Component {
 export default compose(
   graphql(queries.groupInfo),
   graphql(mutations.incCounter, {
-    props: ({ mutate }) => ({
+    props: ({ mutate, ownProps }) => ({
       incCounter: id =>
         mutate({
-          variables: { id }
+          variables: { id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            incCounter: {
+              id,
+              __typename: 'Counter',
+              count:
+                ownProps.data.group.counters.find(c => c.id === id).count + 1
+            }
+          }
         })
-    }),
-    options: props => ({
-      refetchQueries: [
-        {
-          query: queries.groupInfo,
-          variables: { groupId: props.groupId }
-        }
-      ]
     })
   }),
   graphql(mutations.createCounter, {
