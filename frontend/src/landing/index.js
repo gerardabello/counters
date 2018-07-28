@@ -32,11 +32,20 @@ class Home extends Component {
     this.state = { groupName: '' }
 
     this.handleButtonClick = this.handleButtonClick.bind(this)
+
+    this.handleInputKeyDown = this.handleInputKeyDown.bind(this)
   }
 
   handleButtonClick () {
     this.props.createGroup(this.state.groupName)
-    // redirect
+  }
+
+  handleInputKeyDown (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault()
+      e.stopPropagation()
+      this.props.createGroup(this.state.groupName)
+    }
   }
 
   render () {
@@ -52,6 +61,7 @@ class Home extends Component {
                 fontSize='size1'
                 value={this.state.groupName}
                 onChange={e => this.setState({ groupName: e.target.value })}
+                onKeyDown={this.handleInputKeyDown}
               />
               <Button black size='large' onClick={this.handleButtonClick}>
                 create

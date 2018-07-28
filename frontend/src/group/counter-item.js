@@ -55,6 +55,7 @@ class CounterNameInput extends Component {
 
     this.handleNameClick = this.handleNameClick.bind(this)
     this.handleInputBlur = this.handleInputBlur.bind(this)
+    this.handleInputKeyDown = this.handleInputKeyDown.bind(this)
   }
 
   componentDidMount () {
@@ -80,6 +81,13 @@ class CounterNameInput extends Component {
     this.props.onChange(this.state.tempValue)
   }
 
+  handleInputKeyDown (e) {
+    if (e.keyCode == 13) {
+      this.setState({ editing: false })
+      this.props.onChange(this.state.tempValue)
+    }
+  }
+
   render () {
     const { value, onChange } = this.props
 
@@ -94,6 +102,7 @@ class CounterNameInput extends Component {
           value={this.state.tempValue}
           textAlign='right'
           onChange={e => this.setState({ tempValue: e.target.value })}
+          onKeyDown={this.handleInputKeyDown}
         />
       )
     }
