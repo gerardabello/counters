@@ -4,14 +4,14 @@
   "main": "src/server.js",
   "scripts": {
     "build": "webpack --mode none",
-    "prod": "npm run serve",
+    "prod": "yarn run serve",
     "serve": "NODE_ENV=production node dist/bundle.js",
-    "dev": "npm run cleandb && concurrently -k \"npm run startdb\" \"npm run compile:watch\" \"sleep 10 && npm run start\"",
+    "dev": "yarn run cleandb && concurrently -k \"npm run startdb\" \"npm run compile:watch\" \"sleep 10 && npm run start\"",
     "compile:watch": "webpack --mode development --watch",
     "start": "nodemon --inspect -r source-map-support/register dist/bundle.js",
     "startdb": "docker run --name counters-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres postgres",
     "cleandb": "docker stop counters-db || true && docker rm counters-db || true",
-    "prepush": "npm test",
+    "prepush": "yarn test",
     "precommit": "lint-staged",
     "test": "jest src/",
     "test:watch": "jest src/ --watch"
@@ -19,11 +19,11 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
-    "dotenv": "^4.0.0",
+    "dotenv": "^6.0.0",
     "express": "^4.16.2",
     "express-graphql": "^0.6.11",
     "glob-require-dir": "^1.0.3",
-    "graphql": "^0.13.1",
+    "graphql": "^14.0.2",
     "pg": "^7.4.3",
     "ramda": "^0.25.0",
     "source-map-support": "^0.5.6",
@@ -31,16 +31,15 @@
     "squel": "^5.12.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.42",
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-loader": "8.0.0-beta.0",
-    "concurrently": "^3.5.1",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-loader": "8.0.2",
+    "concurrently": "^4.0.1",
     "nodemon": "^1.10.0",
     "webpack": "^4.16.2",
-    "webpack-cli": "^2.0.6"
+    "webpack-cli": "^3.1.1"
   },
   "standard": {
     "globals": [
@@ -51,7 +50,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run lint",
+      "yarn run lint",
       "git add"
     ]
   }

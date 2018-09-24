@@ -13,10 +13,10 @@ before_install:
   - export DEBIAN_FRONTEND=noninteractive;
   - sudo apt-get -qq --yes update
   - cd frontend
-  - npm install
+  - yarn install
   - cd ..
   - cd backend
-  - npm install
+  - yarn install
   - cd ..
 
 test:
@@ -24,10 +24,10 @@ test:
 
 script:
   - cd frontend
-  - API_HOST=https://api.counters.gerard.sh npm run build
+  - API_HOST=https://api.counters.gerard.sh yarn run build
   - cd ..
   - cd backend
-  - npm run build
+  - yarn run build
   - cd ..
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
       docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD";
