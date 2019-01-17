@@ -9,6 +9,15 @@ export const incCounter = gql`
   }
 `
 
+export const decCounter = gql`
+  mutation decCounter($id: String!) {
+    decCounter(id: $id) {
+      id
+      count
+    }
+  }
+`
+
 export const createCounter = gql`
   mutation createCounter($name: String!, $groupId: String!) {
     createCounter(name: $name, groupId: $groupId) {

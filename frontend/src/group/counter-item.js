@@ -11,6 +11,7 @@ import Text from 'components/text'
 
 const Name = styled.div`
   flex: 1;
+  margin-right: 24px;
 `
 const CounterItemWrapper = styled.div`
   display: flex;
@@ -21,7 +22,6 @@ const CounterItemWrapper = styled.div`
 
 const CountButtonWrapper = styled.div`
   display: flex;
-  margin-left: 24px;
   cursor: pointer;
   user-select: none;
 `
@@ -121,6 +121,7 @@ export const CounterItem = ({
   focusOnNewCounter,
   showName,
   onInc,
+  onDec,
   id,
   onNameChange
 }) => (
@@ -134,11 +135,16 @@ export const CounterItem = ({
         />
       </Name>
     )}
-    <CountButtonWrapper onClick={() => onInc(id)}>
+    <CountButtonWrapper>
+      <Button size='icon' onClick={() => onDec(id)}>
+        -
+      </Button>
       <Count>
         <Text size='size1'>{count}</Text>
       </Count>
-      <Button size='icon'>+</Button>
+      <Button size='icon' onClick={() => onInc(id)}>
+        +
+      </Button>
     </CountButtonWrapper>
   </CounterItemWrapper>
 )

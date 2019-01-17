@@ -24,3 +24,11 @@ export const incCounter = async id => {
     count: counter.count + 1
   })
 }
+
+export const decCounter = async id => {
+  const counter = await db.get(id)
+  return db.update({
+    id,
+    count: counter.count - 1
+  })
+}

@@ -45,6 +45,7 @@ class GroupPage extends Component {
 
     this.handleAddSubcounterClick = this.handleAddSubcounterClick.bind(this)
     this.handleIncCounter = this.handleIncCounter.bind(this)
+    this.handleDecCounter = this.handleDecCounter.bind(this)
   }
 
   shouldComponentUpdate (nextProps) {
@@ -62,6 +63,10 @@ class GroupPage extends Component {
 
   handleIncCounter (counterId) {
     this.props.incCounter(counterId)
+  }
+
+  handleDecCounter (counterId) {
+    this.props.decCounter(counterId)
   }
 
   componentDidUpdate () {
@@ -88,6 +93,7 @@ class GroupPage extends Component {
                 name={counter.name}
                 count={counter.count}
                 onInc={this.handleIncCounter}
+                onDec={this.handleDecCounter}
                 onNameChange={name =>
                   this.props.renameCounter(name, counter.id)
                 }
@@ -124,6 +130,23 @@ export default compose(
               __typename: 'Counter',
               count:
                 ownProps.data.group.counters.find(c => c.id === id).count + 1
+            }
+          }
+        })
+    })
+  }),
+  graphql(mutations.decCounter, {
+    props: ({ mutate, ownProps }) => ({
+      decCounter: id =>
+        mutate({
+          variables: { id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            decCounter: {
+              id,
+              __typename: 'Counter',
+              count:
+                ownProps.data.group.counters.find(c => c.id === id).count - 1
             }
           }
         })

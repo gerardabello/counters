@@ -1,14 +1,8 @@
-import {
-  GraphQLList,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLBoolean,
-  GraphQLInt
-} from 'graphql'
+import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql'
 import * as R from 'ramda'
 
 import db from './db'
-import { createCounter, incCounter, renameCounter } from './service'
+import { createCounter, incCounter, decCounter, renameCounter } from './service'
 
 export const Type = new GraphQLObjectType({
   name: 'Counter',
@@ -74,6 +68,15 @@ export const mutations = {
     },
     resolve: async (root, { id }) => {
       return incCounter(id)
+    }
+  },
+  decCounter: {
+    type: Type,
+    args: {
+      id: { type: GraphQLString }
+    },
+    resolve: async (root, { id }) => {
+      return decCounter(id)
     }
   }
 }
